@@ -1,26 +1,30 @@
 import React from "react";
 import Todos from "./Todos";
 import Header from "./layout/Header";
+import AddTodo from "./AddTodo";
+import uuid from "uuid";
+
 class TodoApp extends React.Component {
   state = {
     todos: [
       {
-        id: 1,
-        title: "Scheduled an interview with BankOnIT",
+        id: uuid.v4(),
+        title: "Setup development environment",
         completed: true
       },
       {
-        id: 2,
-        title: "Wow them with my Node.js, MySQL, and React skills",
+        id: uuid.v4(),
+        title: "Develop website and add content",
         completed: false
       },
       {
-        id: 3,
-        title: "Begin a fulfilling career with a great company",
+        id: uuid.v4(),
+        title: "Deploy to live server",
         completed: false
       }
     ]
   };
+
   handleChange = id => {
     this.setState({
       todos: this.state.todos.map(todo => {
@@ -31,13 +35,41 @@ class TodoApp extends React.Component {
       })
     });
   };
+
+  deleteTodo = id => {
+    this.setState({
+      todos: [
+        ...this.state.todos.filter(todo => {
+          return todo.id !== id;
+        })
+      ]
+    });
+  };
+
+  addTodo = title => {
+    const newTodo = {
+      id: uuid.v4(),
+      title: title,
+      completed: false
+    };
+    this.setState({
+      todos: [...this.state.todos, newTodo]
+    });
+  };
+
   render() {
     return (
       <div className="container">
         <Header />
-        <Todos todos={this.state.todos} handleChange={this.handleChange} />
+        <AddTodo addTodo={this.addTodo} />
+        <Todos
+          todos={this.state.todos}
+          handleChange={this.handleChange}
+          deleteTodo={this.deleteTodo}
+        />
       </div>
     );
   }
 }
+
 export default TodoApp;
